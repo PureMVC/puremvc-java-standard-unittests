@@ -1,123 +1,123 @@
 /*
- * PureMVC - Copyright(c) 2006, 2007 FutureScale, Inc., Some rights reserved.
- * Your reuse is governed by Creative Commons Attribution 2.5 License
- */
+ PureMVC Java port by Frederic Saunier <frederic.saunier@puremvc.org>
+ 
+ Adapted from sources of thoses different authors :
+ 	Donald Stinchfield <donald.stinchfield@puremvc.org>
+ 	Ima OpenSource <opensource@ima.eu>
+ 	Anthony Quinault <anthony.quinault@puremvc.org>
+ 
+ PureMVC - Copyright(c) 2006-10 Futurescale, Inc., Some rights reserved. 
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+*/
 package org.puremvc.java.patterns.observer;
 
-import junit.framework.TestCase;
-
-import org.puremvc.java.interfaces.*;
-import org.puremvc.java.patterns.observer.Notification;
-import org.puremvc.java.patterns.observer.Observer;
-
-/**
- *
- */
-public class ObserverTest extends TestCase implements IFunction
-{
+import org.junit.Assert;
+import org.junit.Test;
+import org.puremvc.java.interfaces.IFunction;
+import org.puremvc.java.interfaces.INotification;
 
 	/**
-	 * Constructor.
+	 * Tests PureMVC Observer class.
 	 * 
-	 * @param methodName
-	 *            the name of the test method an instance to run
-	 */
-	public ObserverTest( String methodName )
-	{
-		super( methodName );
-	}
-
-	/**
-	 * Tests observer class when initialized by accessor methods.
+	 * <P>
+	 * Since the Observer encapsulates the interested object's
+	 * callback information, there are no getters, only setters. 
+	 * It is, in effect write-only memory.</P>
+	 * 
+	 * <P>
+	 * Therefore, the only way to test it is to set the 
+	 * notification method and context and call the notifyObserver
+	 * method.</P>
 	 * 
 	 */
-	public void testObserverAccessors( )
-	{
+public class ObserverTest {
 
-		// Create observer with null args, then
-		// use accessors to set notification method and context
-		Observer observer = new Observer( null, null );
-		observer.setNotifyContext( this );
-		observer.setNotifyMethod( this );
-
-		// create a test event, setting a payload value and notify
-		// the observer with it. since the observer is this class
-		// and the notification method is observerTestMethod,
-		// successful notification will result in our local
-		// observerTestVar being set to the value we pass in
-		// on the note body.
-		Notification note = new Notification( "ObserverTestNote", "10", null );
-		observer.notifyObserver( note );
-
-		// test assertions
-		assertTrue( "Expecting observerTestVar = 10",
-				this.observerTestVar.equals( "10" ) );
-	}
 
 	/**
-	 * Tests observer class when initialized by constructor.
-	 * 
+	 * A test variable that proves the notify method was
+	 * executed with 'this' as its exectution context
 	 */
-	public void testObserverConstructor( )
-	{
-
-		// Create observer passing in notification method and context
-		Observer observer = new Observer( this, this );
-
-		// create a test note, setting a body value and notify
-		// the observer with it. since the observer is this class
-		// and the notification method is observerTestMethod,
-		// successful notification will result in our local
-		// observerTestVar being set to the value we pass in
-		// on the note body.
-		Notification note = new Notification( "ObserverTestNote", "5", null );
-		observer.notifyObserver( note );
-
-		// test assertions
-		assertTrue( "Expecting observerTestVar = 5",
-				this.observerTestVar.equals( "5" ) );
-	}
-
+	private int observerTestVar;
+	
 	/**
-	 * Tests the compareNotifyContext method of the Observer class
-	 * 
-	 */
-	public void testCompareNotifyContext( )
-	{
+		 * Tests observer class when initialized by accessor methods.
+		 * 
+		 */
+	@Test
+		public void testObserverAccessors() {
+			
+			// Create observer with null args, then
+			// use accessors to set notification method and context
+		Observer observer = new Observer(null,null);
+		observer.setNotifyContext(this);
+			observer.setNotifyMethod(new ObserverTestFunction());
+			
+			// create a test event, setting a payload value and notify 
+			// the observer with it. since the observer is this class 
+			// and the notification method is observerTestMethod,
+			// successful notification will result in our local 
+			// observerTestVar being set to the value we pass in 
+			// on the note body.
+			Notification note = new Notification("ObserverTestNote",10);
+		observer.notifyObserver(note);
 
-		// Create observer passing in notification method and context
-		Observer observer = new Observer( this, this );
+		// test assertions  			
+			Assert.assertEquals( "Expecting observerTestVar = 10", observerTestVar , 10 );
+		}
 
-		Object negTestObj = new Object();
+		/**
+		 * Tests observer class when initialized by constructor.
+		 * 
+		 */
+	@Test
+		public void testObserverConstructor() {
+			
+			// Create observer passing in notification method and context
+			Observer observer = new Observer(new ObserverTestFunction(),this);
+			
+			// create a test note, setting a body value and notify 
+			// the observer with it. since the observer is this class 
+			// and the notification method is observerTestMethod,
+			// successful notification will result in our local 
+			// observerTestVar being set to the value we pass in 
+			// on the note body.
+			Notification note = new Notification("ObserverTestNote",5);
+		observer.notifyObserver(note);
 
-		// test assertions
-		assertTrue(
-				"Expecting observer.compareNotifyContext(negTestObj) == false",
-				observer.compareNotifyContext( negTestObj ) == false );
-		assertTrue( "Expecting observer.compareNotifyContext(this) == true",
-				observer.compareNotifyContext( this ) == true );
-	}
+		// test assertions  			
+			Assert.assertEquals( "Expecting observerTestVar = 5", observerTestVar , 5 );
+		}
 
-	/**
-	 * A test variable that proves the notify method was executed with 'this' as
-	 * its exectution context
-	 */
-	private String observerTestVar;
+		/**
+		 * Tests the compareNotifyContext method of the Observer class
+		 * 
+		 */
+	@Test
+		public void testCompareNotifyContext() {
+			
+			// Create observer passing in notification method and context
+			Observer observer = new Observer( new ObserverTestFunction(), this );
+			
+			Object negTestObj = new Object();
+			
+		// test assertions  			
+			Assert.assertFalse("Expecting observer.compareNotifyContext(negTestObj) == false", observer.compareNotifyContext(negTestObj) );
+			Assert.assertTrue( "Expecting observer.compareNotifyContext(this) == true", observer.compareNotifyContext(this) );
+		}
 
-	/**
-	 * A function that is used as the observer notification method. It
-	 * multiplies the input number by the observerTestVar value
-	 * @param note 
-	 */
+		
+		/**
+		 * A function that is used as the observer notification
+		 * method. It multiplies the input number by the 
+		 * observerTestVar value
+		 */
 
-	public void onNotification( INotification note )
-	{
-		this.observerTestVar = (String) note.getBody();
-	}
+		private class ObserverTestFunction implements IFunction{
 
-	// never used
-//	private void observerTestMethod( )
-//	{
-//
-//	}
+			public void onNotification(INotification notification) {
+				observerTestVar = (Integer)notification.getBody();
+				
+			}
+
+		}
 }

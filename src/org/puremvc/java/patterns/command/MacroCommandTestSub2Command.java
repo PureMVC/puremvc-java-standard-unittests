@@ -1,46 +1,45 @@
 /*
- * PureMVC - Copyright(c) 2006, 2007 FutureScale, Inc., Some rights reserved.
- * Your reuse is governed by Creative Commons Attribution 2.5 License
- */
+ PureMVC Java port by Frederic Saunier <frederic.saunier@puremvc.org>
+ 
+ Adapted from sources of thoses different authors :
+ 	Donald Stinchfield <donald.stinchfield@puremvc.org>
+ 	Ima OpenSource <opensource@ima.eu>
+ 	Anthony Quinault <anthony.quinault@puremvc.org>
+ 
+ PureMVC - Copyright(c) 2006-10 Futurescale, Inc., Some rights reserved. 
+ Your reuse is governed by the Creative Commons Attribution 3.0 License
+*/
 package org.puremvc.java.patterns.command;
 
-import org.puremvc.java.interfaces.*;
-import org.puremvc.java.patterns.command.SimpleCommand;
+import org.puremvc.java.interfaces.INotification;
 
 /**
  * A SimpleCommand subclass used by MacroCommandTestCommand.
- * 
+ *
  * @see org.puremvc.java.patterns.command.MacroCommandTest MacroCommandTest
- * @see org.puremvc.java.patterns.command.MacroCommandTestCommand
- *      MacroCommandTestCommand
+ * @see org.puremvc.java.patterns.command.MacroCommandTestCommand MacroCommandTestCommand
  * @see org.puremvc.java.patterns.command.MacroCommandTestVO MacroCommandTestVO
  */
-public class MacroCommandTestSub2Command extends SimpleCommand
-{
+public class MacroCommandTestSub2Command extends SimpleCommand {
 
-	/**
-	 * Constructor for <code>MacroCommandTestSub2Command</code>
-	 */
-	public MacroCommandTestSub2Command( )
+	public MacroCommandTestSub2Command()
 	{
 		super();
 	}
-
+	
 	/**
-	 * Fabricate a result by multiplying the input by itself
+	 * Fabricate a result by multiplying the input by 2
 	 * 
-	 * @param note
-	 *            the <code>INotification</code> carrying the
-	 *            <code>MacroCommandTestVO</code>
+	 * @param event the <code>IEvent</code> carrying the <code>MacroCommandTestVO</code>
 	 */
-	public void execute( INotification note )
+	@Override 
+	public void execute( INotification note ) 
 	{
-
-		MacroCommandTestVO vo = (MacroCommandTestVO) note.getBody();
-
+		
+		MacroCommandTestVO vo = (MacroCommandTestVO)note.getBody();
+		
 		// Fabricate a result
-		vo.result2 = vo.input * vo.input;
+		vo.result1 = 2 * vo.input;
 
 	}
-
 }
