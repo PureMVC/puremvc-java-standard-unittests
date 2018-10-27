@@ -2,14 +2,14 @@
 These are the unit tests for the current PureMVC Standard Framework for Java.
 
 * [Discussion](http://forums.puremvc.org/index.php?board=59.0)
-* [Test Results](http://darkstar.puremvc.org/content_header.html?url=http://puremvc.org/pages/docs/Java/standard-unit-test-reports/&desc=PureMVC%20Unit%20Tests%20Standard%20for%20Java)
+* [Test Results](http://puremvc.org/pages/docs/Java/standard-unit-test-reports/)
 
 ## Status
 Production - [Version 1.0](https://github.com/PureMVC/puremvc-java-standard-unittests/blob/master/VERSION)
 
 ## Platforms / Technologies
 * [JUnit](https://github.com/KentBeck/junit)
-* [Java](http://en.wikipedia.org/wiki/Java_(programming_language\))
+* [Java](http://en.wikipedia.org/wiki/Java_\(programming_language\))
 
 ## Features 
 Tested are ...
